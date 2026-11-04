@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>وَنَس — لوحة الإدارة</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>وَنَس <span>Wanas Admin</span></h1>
+  <div id="demoBanner" class="banner" hidden>وضع تجريبي مؤقت (demo-ephemeral): البيانات في الذاكرة فقط وستُفقد عند إعادة التشغيل — ليست بيانات إنتاج حقيقية.</div>
+  <form id="loginForm" class="login">
+    <input id="username" placeholder="اسم المستخدم" required>
+    <button type="submit">دخول تجريبي</button>
+    <span id="loginStatus"></span>
+  </form>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <button data-section="overview">نظرة عامة</button>
+    <button data-section="users">المستخدمون</button>
+    <button data-section="rooms">الغرف</button>
+    <button data-section="moments">المحتوى / اللحظات</button>
+    <button data-section="catalog">الكتالوج (هدايا / دخول / إطارات)</button>
+    <button data-section="wallet">العملات / المحفظة / السجل</button>
+    <button data-section="agencies">الوكالات / المضيفون / الشحن</button>
+    <button data-section="games">الألعاب</button>
+    <button data-section="farm">المزرعة</button>
+    <button data-section="families">العائلات</button>
+    <button data-section="events">الفعاليات</button>
+    <button data-section="missions">المهام</button>
+    <button data-section="reports">البلاغات</button>
+    <button data-section="bans">الحظر</button>
+    <button data-section="notifications">الإشعارات</button>
+    <button data-section="support">الدعم</button>
+    <button data-section="staff">أدوار الطاقم</button>
+    <button data-section="settings">الإعدادات</button>
+  </nav>
+  <main>
+    <section id="overview" class="section active"><h2>نظرة عامة</h2><div id="overviewStats"></div><button id="refreshOverview">تحديث</button></section>
+
+    <section id="users" class="section"><h2>المستخدمون</h2>
+      <input id="usersSearch" placeholder="بحث بالاسم"><button id="usersSearchBtn">بحث</button>
+      <label>صفحة <input id="usersPage" type="number" value="1" min="1"></label>
+      <label>عدد <input id="usersLimit" type="number" value="20" min="1" max="100"></label>
+      <div id="usersTable"></div>
+    </section>
+
+    <section id="rooms" class="section"><h2>الغرف</h2><div id="roomsTable"></div></section>
+
+    <section id="moments" class="section"><h2>المحتوى / اللحظات</h2>
+      <label>الحالة <select id="momentsStatus"><option value="">الكل</option><option value="pending">قيد المراجعة</option><option value="approved">مقبول</option><option value="rejected">مرفوض</option></select></label>
+      <div id="momentsTable"></div>
+    </section>
+
+    <section id="catalog" class="section"><h2>الكتالوج</h2>
+      <label>النوع <select id="catalogType"><option value="">الكل</option><option value="gift">هدية</option><option value="entry_effect">تأثير دخول</option><option value="frame">إطار</option></select></label>
+      <label>الحالة <select id="catalogStatus"><option value="">الكل</option><option value="draft">مسودة</option><option value="approved">مقبول</option><option value="published">منشور</option><option value="disabled">معطّل</option><option value="archived">مؤرشف</option></select></label>
+      <button id="catalogSearchBtn">بحث</button>
+      <div id="catalogTable"></div>
+      <h3>إضافة عنصر خاص</h3>
+      <form id="catalogForm">
+        <input name="name" placeholder="الاسم" required>
+        <select name="type"><option value="gift">هدية</option><option value="entry_effect">تأثير دخول</option><option value="frame">إطار</option></select>
+        <input name="price" type="number" placeholder="السعر" value="0">
+        <select name="format"><option value="png">png</option><option value="gif">gif</option><option value="mp4">mp4</option><option value="svga">svga</option></select>
+        <label><input name="special" type="checkbox"> هدية خاصة</label>
+        <button type="submit">إنشاء (مسودة)</button>
+      </form>
+      <h3>التحقق من ملف (بدون رفع فعلي)</h3>
+      <form id="validateForm">
+        <select id="validateFormat"><option value="png">png</option><option value="gif">gif</option><option value="mp4">mp4</option><option value="svga">svga</option></select>
+        <input id="validateFile" type="file" required>
+        <button type="submit">تحقق من الملف</button>
+      </form>
+      <pre id="validateResult"></pre>
+    </section>
+
+    <section id="wallet" class="section"><h2>العملات / المحفظة / السجل</h2>
+      <form id="walletAdjustForm">
+        <input name="userId" placeholder="User ID" required>
+        <select name="type"><option value="credit">إضافة</option><option value="debit">خصم</option></select>
+        <input name="amount" type="number" step="any" placeholder="المبلغ" required>
+        <select name="currency"><option value="coins">coins</option><option value="premiumCoins">premiumCoins</option></select>
+        <input name="reason" placeholder="السبب (مطلوب)" required>
+        <input name="reference" placeholder="المرجع (مطلوب)" required>
+        <input name="idempotencyKey" placeholder="Idempotency-Key (مطلوب)" required>
+        <button type="submit">تعديل الرصيد</button>
+      </form>
+      <div id="ledgerTable"></div>
+    </section>
+
+    <section id="agencies" class="section"><h2>الوكالات / المضيفون / الشحن</h2>
+      <form id="agencyForm"><input name="name" placeholder="اسم الوكالة" required><button type="submit">إنشاء وكالة</button></form>
+      <div id="agenciesTable"></div>
+      <form id="hostInviteForm"><input name="userId" placeholder="User ID للمضيف" required><button type="submit">دعوة مضيف</button></form>
+      <div id="hostsTable"></div>
+      <div id="rechargeTable"></div>
+    </section>
+
+    <section id="games" class="section"><h2>الألعاب</h2><div id="gamesTable"></div><pre id="gamesConfig"></pre>
+      <button id="gamesPauseBtn">إيقاف طارئ للألعاب</button>
+    </section>
+
+    <section id="farm" class="section"><h2>المزرعة</h2><div id="farmInfo"></div></section>
+    <section id="families" class="section"><h2>العائلات</h2><div id="familiesTable"></div></section>
+    <section id="events" class="section"><h2>الفعاليات</h2><div id="eventsTable"></div></section>
+    <section id="missions" class="section"><h2>المهام</h2><div id="missionsTable"></div></section>
+    <section id="reports" class="section"><h2>البلاغات</h2><div id="reportsTable"></div></section>
+
+    <section id="bans" class="section"><h2>الحظر</h2>
+      <form id="banForm">
+        <select name="targetType"><option value="user">مستخدم</option><option value="host">مضيف</option><option value="agency">وكالة</option><option value="recharge-agent">وكيل شحن</option><option value="room">غرفة</option></select>
+        <input name="targetId" placeholder="Target ID" required>
+        <input name="reason" placeholder="السبب (مطلوب)" required>
+        <input name="category" placeholder="التصنيف">
+        <input name="scope" placeholder="النطاق (افتراضي global)">
+        <button type="submit">حظر</button>
+      </form>
+      <div id="bansTable"></div>
+    </section>
+
+    <section id="notifications" class="section"><h2>الإشعارات</h2><p>لا توجد واجهة إشعارات منفصلة في نسخة البداية؛ تُدار الإشعارات عبر إعدادات FCM عند تفعيلها (انظر قسم الإعدادات).</p><div id="notificationsTable"></div></section>
+    <section id="support" class="section"><h2>الدعم</h2><p>تذاكر الدعم تُعرض هنا عند توفرها؛ البلاغات المفتوحة تظهر في قسم البلاغات.</p><div id="supportTable"></div></section>
+    <section id="staff" class="section"><h2>أدوار الطاقم</h2><p>الأدوار: admin، finance، catalog_manager، moderator، user. تُدار عبر حسابات المستخدمين (قسم المستخدمون).</p><div id="staffTable"></div></section>
+    <section id="settings" class="section"><h2>الإعدادات</h2><pre id="settingsInfo"></pre></section>
+  </main>
+</div>
+<script src="admin.js"></script>
+</body>
+</html>

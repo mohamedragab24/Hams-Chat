@@ -1,0 +1,43 @@
+# Secrets and environment
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.keystore
+*.jks
+google-services.json
+GoogleService-Info.plist
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+.vercel
+
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.generated.dart
+
+# Android / iOS
+android/.gradle/
+android/local.properties
+ios/Pods/
+ios/.symlinks/
+*.ipa
+*.apk
+*.aab
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
