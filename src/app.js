@@ -20,6 +20,9 @@ app.use(express.json({ limit: '5mb' }));
 // Static admin dashboard (Arabic RTL single page).
 app.use('/admin', express.static(path.join(__dirname, '..', 'public', 'admin')));
 
+// Root of the deployment must open the dashboard, not 'Cannot GET /'.
+app.get('/', (req, res) => res.redirect('/admin'));
+
 // Health — no auth, always labelled. demo=true when DATABASE_URL is unset.
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, mode: config.mode, demo: config.demo });
